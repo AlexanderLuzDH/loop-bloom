@@ -1,39 +1,5 @@
+/* Copyright 2026 Busleyden. All rights reserved. */
 (function(root){
-  'use strict';
-  function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
-  function neighbors(v,n){const x=v%n,y=Math.floor(v/n);return [[x+1,y],[x,y+1],[x-1,y],[x,y-1]].filter(([a,b])=>a>=0&&b>=0&&a<n&&b<n).map(([a,b])=>b*n+a);}
-  function shuffled(arr,r){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-  function generate(index){
-    if(index===0)return{n:4,start:5,solution:[5,6,7,11,15,14,13,9,5],flowers:[7,15,13],rocks:[0,2,3,12],name:'The first little loop',chapter:'01 · FIND YOUR WAY'};
-    const n=index<6?4:index<15?5:6,r=rng(713+index*139),minimum=index<6?10:index<15?14:18;
-    let solution=null;
-    for(let attempt=0;attempt<60&&!solution;attempt++){
-      const start=Math.floor(r()*n*n),path=[start],seen=new Set(path);let nodes=0;
-      function walk(v){
-        if(++nodes>9000)return false;
-        if(path.length>=minimum&&neighbors(v,n).includes(start)){solution=[...path,start];return true;}
-        if(path.length>=Math.min(n*n-2,minimum+8))return false;
-        for(const q of shuffled(neighbors(v,n),r)){if(seen.has(q))continue;seen.add(q);path.push(q);if(walk(q))return true;path.pop();seen.delete(q);}return false;
-      }walk(start);
-    }
-    if(!solution)throw new Error('No cycle for level '+index);
-    const path=solution.slice(0,-1),count=Math.min(index<6?3:index<15?5:7,path.length-2);
-    const flowers=[];for(let k=1;k<=count;k++)flowers.push(path[Math.floor(k*path.length/(count+1))]);
-    const free=Array.from({length:n*n},(_,i)=>i).filter(i=>!path.includes(i));
-    const rocks=shuffled(free,r).slice(0,Math.ceil(free.length*(index<6?.45:.7)));
-    const names=['Morning dew','A gentle detour','Past the stones','Room to wander','The long way home','Quiet corners','A hidden clearing','Follow the light','Cross the meadow','A winding thought','Tangled roots','A perfect afternoon','Between the leaves','One more turn','A wider world','A curious path','The secret garden','Under the canopy','Petals in motion','A little constellation','The last sunbeam','Where paths meet','Full bloom'];
-    return{n,start:path[0],solution,flowers,rocks,name:names[index-1],chapter:index<6?'01 · FIND YOUR WAY':index<15?'02 · WANDER A LITTLE':'03 · MAKE SOMETHING BEAUTIFUL'};
-  }
-  const levels=Array.from({length:24},(_,i)=>generate(i));
-  function advance(path,target,level){
-    if(!Number.isInteger(target)||target<0||target>=level.n*level.n||level.rocks.includes(target))return{path,kind:'stone'};
-    if(!path.length)return target===level.start?{path:[target],kind:'start'}:{path,kind:'start-first'};
-    const last=path[path.length-1];if(last===target)return{path,kind:'same'};
-    if(!neighbors(last,level.n).includes(target))return{path,kind:'adjacent'};
-    if(path.length>1&&path[path.length-2]===target)return{path:path.slice(0,-1),kind:'undo'};
-    if(target===level.start&&path.length>=4){return level.flowers.every(f=>path.includes(f))?{path:[...path,target],kind:'win'}:{path,kind:'flowers-first'};}
-    if(path.includes(target))return{path,kind:'cross'};
-    return{path:[...path,target],kind:'move'};
-  }
-  const api={levels,neighbors,generate,advance};if(typeof module!=='undefined')module.exports=api;root.LoopBloom=api;
+const levels=[{"n":4,"start":7,"flowers":[6,8,14],"rocks":[1,5],"budget":10,"solution":[7,6,10,9,8,12,13,14,15,11,7],"name":"First principles","chapter":"01 · THE ESSENTIALS","difficulty":"Intro"},{"n":4,"start":7,"flowers":[6,4,13],"rocks":[14,15],"budget":10,"solution":[7,6,5,4,8,12,13,9,10,11,7],"name":"Leave a way back","chapter":"01 · THE ESSENTIALS","difficulty":"Intro"},{"n":5,"start":19,"flowers":[3,17,11,21],"rocks":[5,0,1],"budget":16,"solution":[19,14,9,4,3,8,13,18,17,12,11,16,21,22,23,24,19],"name":"The wrong shortcut","chapter":"02 · THINK AHEAD","difficulty":"Logic"},{"n":5,"start":17,"flowers":[14,2,7,15],"rocks":[5,0,24],"budget":14,"solution":[17,18,19,14,13,8,3,2,7,12,11,10,15,16,17],"name":"Close quarters","chapter":"02 · THINK AHEAD","difficulty":"Logic"},{"n":5,"start":18,"flowers":[22,16,5,3],"rocks":[0,1,2],"budget":16,"solution":[18,23,22,21,16,15,10,5,6,7,8,3,4,9,14,19,18],"name":"Divide and return","chapter":"02 · THINK AHEAD","difficulty":"Logic"},{"n":6,"start":35,"flowers":[16,9,13,20,30],"rocks":[1,23,0,6,26],"budget":20,"solution":[35,29,28,22,16,15,9,8,7,13,14,20,19,25,24,30,31,32,33,34,35],"name":"Across the divide","chapter":"02 · THINK AHEAD","difficulty":"Logic"},{"n":6,"start":20,"flowers":[18,8,5,22,34],"rocks":[3,28,21,2,15],"budget":22,"solution":[20,19,18,12,13,14,8,9,10,4,5,11,17,16,22,23,29,35,34,33,32,26,20],"name":"The narrow escape","chapter":"03 · THE CHALLENGE","difficulty":"Expert"},{"n":7,"start":37,"flowers":[23,3,19,13,33,39],"rocks":[8,48,47,7,38,40],"budget":22,"solution":[37,30,23,24,17,10,3,4,11,18,19,12,13,20,27,34,33,32,39,46,45,44,37],"name":"A delayed decision","chapter":"03 · THE CHALLENGE","difficulty":"Expert"},{"n":6,"start":0,"flowers":[9,11,34,20,18],"rocks":[14,16,31,12,29],"budget":24,"solution":[0,1,2,3,9,10,11,17,23,22,28,34,33,27,21,20,26,25,24,18,19,13,7,6,0],"name":"No room to waste","chapter":"03 · THE CHALLENGE","difficulty":"Expert"},{"n":6,"start":32,"flowers":[22,5,15,19,2,12],"rocks":[0,3,6,9,29],"budget":30,"solution":[32,33,34,28,22,23,17,11,5,4,10,16,15,21,27,26,25,19,20,14,8,2,1,7,13,12,18,24,30,31,32],"name":"Thread the needle","chapter":"03 · THE CHALLENGE","difficulty":"Expert"},{"n":7,"start":39,"flowers":[30,23,11,12,8,35],"rocks":[26,27,47,41,15,34],"budget":24,"solution":[39,32,31,30,23,24,25,18,11,12,5,4,3,10,9,8,7,14,21,28,35,36,37,38,39],"name":"The long commitment","chapter":"03 · THE CHALLENGE","difficulty":"Expert"},{"n":7,"start":20,"flowers":[34,47,30,21,1,22,11],"rocks":[6,43,45,18,29,0],"budget":32,"solution":[20,27,34,41,48,47,46,39,38,31,30,37,36,35,28,21,14,7,8,1,2,9,16,15,22,23,24,17,10,11,12,13,20],"name":"The final crossing","chapter":"03 · THE CHALLENGE","difficulty":"Expert"}];
+const engine=typeof module!=='undefined'?require('./engine.js'):root.LoopBloomEngine;const api={...engine,levels};if(typeof module!=='undefined')module.exports=api;root.LoopBloom=api;
 })(typeof window==='undefined'?globalThis:window);

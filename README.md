@@ -1,7 +1,20 @@
 # Loop Bloom
 
-An original browser puzzle game by Busleyden. Draw a single unbroken loop through every flower and back to the starting ring. Includes 24 solvable gardens, touch/mouse/keyboard controls, hints, undo, replay, local progress and optional synthesized sound.
+A compact route-planning puzzle by Busleyden.
 
-Open `index.html` through a static web server. No build step, downloaded assets, account, remote API, analytics or payment code is required. `node verify.cjs` verifies the puzzle solutions and path rules. Browser playtesting remains necessary. No platform SDK or ad integration is included in this prototype.
+Visit the numbered flowers in order. Return to the home ring in exactly the displayed number of moves. Your route cannot cross itself, revisit a space or pass through a stone.
 
-Copyright 2026 Busleyden. All rights reserved. No third-party assets. Development prototype; no player testing, publisher acceptance or revenue claimed.
+## Route-planning edition
+
+- Twelve fixed puzzles: two introductions, four Logic boards and six Expert boards.
+- Every move limit is verified to be the minimum for that board.
+- Mouse, touch and keyboard controls; unlimited undo, with no timer.
+- Hints reveal one next move consistent with your route, or explain how far to undo.
+- Assisted and unassisted completion are recorded separately. Progress stays in your browser.
+- Learn, Logic and Expert buttons let you skip directly to a difficulty.
+
+This is a playable development prototype. Player enjoyment and retention have not been established. No accounts, analytics, advertising or purchases.
+
+Run `node verify.cjs` for puzzle and rule checks. Serve this directory with an ordinary static server to play locally.
+
+Copyright 2026 Busleyden. All rights reserved.

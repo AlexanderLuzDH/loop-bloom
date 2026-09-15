@@ -44,5 +44,11 @@
     }
     walk(path.at(-1),level.flowers.filter(f=>path.includes(f)).length);return{solutions,nodes,truncated};
   }
-  const api={neighbors,advance,solve,lowerBound};if(typeof module!=='undefined')module.exports=api;root.LoopBloomEngine=api;
+  function signature(level){return JSON.stringify([level.n,level.start,level.budget,level.flowers,level.rocks]);}
+  function restoreRun(run,level){
+    if(!run||run.signature!==signature(level)||!Array.isArray(run.path)||run.path.length>level.budget||!Number.isSafeInteger(run.hints)||run.hints<0)return null;
+    let path=[];for(const target of run.path){const result=advance(path,target,level);if(!['start','move'].includes(result.kind))return null;path=result.path;}
+    return{path,hints:run.hints};
+  }
+  const api={neighbors,advance,solve,lowerBound,signature,restoreRun};if(typeof module!=='undefined')module.exports=api;root.LoopBloomEngine=api;
 })(typeof window==='undefined'?globalThis:window);

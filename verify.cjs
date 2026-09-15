@@ -1,5 +1,5 @@
 const assert=require('node:assert/strict');
-const {levels,advance,solve,lowerBound,neighbors}=require('./levels.js');
+const {levels,advance,solve,lowerBound,neighbors,signature,restoreRun}=require('./levels.js');
 const metrics=require('./curation.json');
 for(const [i,l] of levels.entries()){
   assert.equal(new Set(l.solution.slice(0,-1)).size,l.budget,`self-intersection ${i}`);
@@ -23,4 +23,15 @@ assert.equal(advance([0,1,2,5,4],1,square).kind,'cross');
 assert.equal(advance([0,1],8,square).kind,'adjacent');
 assert.equal(advance([],99,square).kind,'stone');
 assert.equal(solve(square,{prefix:[0,1,4,5,8]}).solutions.length,0,'invalid prefix must not generate hint');
+const resumeLevel=levels[8],run={signature:signature(resumeLevel),path:resumeLevel.solution.slice(0,8),hints:2};
+assert.deepEqual(restoreRun(run,resumeLevel),{path:run.path,hints:2});
+assert.notEqual(restoreRun(run,resumeLevel).path,run.path,'restored path must not alias saved data');
+assert.equal(restoreRun({...run,signature:'older puzzle'},resumeLevel),null);
+assert.equal(restoreRun({...run,hints:-1},resumeLevel),null);
+assert.equal(restoreRun({...run,path:resumeLevel.solution},resumeLevel),null,'completed routes should not resume as unfinished');
+assert.equal(restoreRun({...run,path:[resumeLevel.start,99]},resumeLevel),null);
+assert.equal(restoreRun({...run,path:[resumeLevel.start,resumeLevel.solution[1],resumeLevel.start]},resumeLevel),null,'saved data must contain the resulting path, not undo commands');
+assert.equal(restoreRun({signature:signature(square),path:[0,1,4,5,8],hints:0},square),null,'reject out-of-order checkpoint in saved data');
+assert.deepEqual(restoreRun({...run,path:[],hints:1},resumeLevel),{path:[],hints:1},'hint usage before the first move must survive reload');
 console.log(`PASS: ${levels.length} boards; exact minimum budgets; ordered checkpoints; no crossing; undo; prefix-consistent hints; ${metrics.reduce((s,l)=>s+l.traps,0)} verified misleading branches.`);
+console.log('PASS: saved-route validation, puzzle signature, hint history and safe recovery from invalid saves.');

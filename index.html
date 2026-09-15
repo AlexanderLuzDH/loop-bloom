@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#102e2b">
+  <meta name="description" content="Draw one unbroken loop. Visit every flower. Bring the garden to life.">
+  <title>Loop Bloom</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="game">
+    <header><a class="wordmark" href="./" aria-label="Loop Bloom home"><span class="mark">✳</span> loop<span>bloom</span></a><div class="header-actions"><button id="sound" class="icon" aria-label="Turn sound on" title="Sound">♪</button><button id="levels" class="icon" aria-label="Choose a garden" title="Gardens">▦</button></div></header>
+    <section class="intro"><p class="eyebrow" id="chapter">A LITTLE SPACE TO THINK</p><h1 id="title">Bring it full circle.</h1><p id="instruction">Start at the glowing ring. Visit every flower. Loop back home.</p></section>
+    <section class="play-area" aria-label="Garden puzzle">
+      <div class="board-top"><div><span class="muted">GARDEN</span><strong id="level-label">01 / 24</strong></div><div class="progress-pill"><span id="flower-icon">✿</span><span id="flower-count">0 / 3</span></div><div class="steps"><span class="muted">STEPS</span><strong id="step-count">0</strong></div></div>
+      <div class="garden-shell"><div id="board" role="group" aria-label="Draw a loop through the flowers"></div><svg id="route" aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none"></svg><div id="sparks" aria-hidden="true"></div></div>
+      <div class="board-bottom"><span id="status" role="status" aria-live="polite">Drag or tap from the ring to begin.</span><span id="par">A neat loop: 12</span></div>
+      <nav class="tools" aria-label="Puzzle controls"><button id="undo"><span>↶</span> Undo</button><button id="reset"><span>↻</span> Reset</button><button id="hint"><span>◌</span> Hint</button></nav>
+    </section>
+    <footer><span id="total-bloom">0 gardens blooming</span><button id="how">How to play</button><span class="signature">A BUSLEYDEN GAME</span></footer>
+    <dialog id="win"><div class="dialog-content"><div class="bloom-emblem" aria-hidden="true">✺</div><p class="eyebrow">A SMALL MOMENT OF MAGIC</p><h2>Beautifully connected.</h2><div id="stars" aria-label="Three stars">✦ ✦ ✦</div><p id="win-copy"></p><button id="next" class="primary">Next garden <span>→</span></button><button id="replay" class="secondary">Try a different loop</button></div></dialog>
+    <dialog id="picker"><div class="dialog-content"><button class="close" data-close="picker" aria-label="Close garden selector">×</button><p class="eyebrow">YOUR LITTLE WORLD</p><h2>The gardens</h2><p>Each loop leaves something brighter.</p><div id="level-grid"></div></div></dialog>
+    <dialog id="help"><div class="dialog-content"><button class="close" data-close="help" aria-label="Close instructions">×</button><p class="eyebrow">ONE LINE. A LITTLE WONDER.</p><h2>Make a living loop.</h2><ol><li>Start on the glowing ring.</li><li>Move up, down, left or right to connect neighboring spaces.</li><li>Visit every flower, then return to the ring.</li><li>Your path cannot cross itself or pass through a stone.</li></ol><p>Drag with a mouse or finger, or tap one space at a time. Use arrow keys after choosing a space. Backspace undoes a step. Escape closes a window.</p><p>Shorter loops earn more stars. Hints show one possible route; you can always find your own.</p><button class="primary" data-close="help">Let's grow</button></div></dialog>
+  </main><script src="levels.js"></script><script src="game.js"></script>
+</body></html>
